@@ -42,9 +42,9 @@ const vendorLogin = async (req, res) => {
     const token = jwt.sign({ vendorId: vendor._id }, secretKey, {
       expiresIn: "1h",
     });
-
-    res.status(200).json({ success: "Login successful", token });
-    console.log(email, "this is token", token);
+    const vendorId = vendor._id;
+    res.status(200).json({ success: "Login successful", token, vendorId });
+    console.log(email, "this is token", token, vendorId);
   } catch (error) {
     console.log(error);
     res.status(500).json({ error: "Internal server error" });
@@ -68,7 +68,9 @@ const getVendorById = async (req, res) => {
     if (!vendor) {
       return res.status(404).json({ error: "Vendor not found" });
     }
-    res.status(200).json({ vendor });
+    const vendorFirmId = vendor.firm.length > 0 ? vendor.firm[0]._id : null;
+    res.status(200).json({vendorId, vendorFirmId, vendor });
+    console.log(vendorId, vendorFirmId, vendor)
   } catch (error) {
     console.log(error);
     res.status(500).json({ error: "Internal server error" });
